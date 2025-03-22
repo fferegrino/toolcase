@@ -6,11 +6,14 @@ WORKDIR /app
 
 WORKDIR /app/library
 
-COPY library/pyproject.toml library/uv.lock ./
+COPY library/pyproject.toml \
+    library/uv.lock \
+    library/README.md \
+    ./
+
+COPY library/src/ ./src/
 
 RUN uv sync
-
-COPY library/ ./library
 
 WORKDIR /app
 
