@@ -10,5 +10,28 @@ dependencies = [
     "toolcase"
 ]
 
+[dependency-groups]
+dev = [
+    "ruff>=0.11.2",
+]
+
 [tool.uv.sources]
 toolcase = { path = "../../library" }
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "UP", # pyupgrade
+    "B", # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I", # isort
+    "W", # pyright
+]
+
+
+
