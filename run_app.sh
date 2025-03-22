@@ -1,7 +1,28 @@
 #!/bin/bash
+command=$1
+app_name=$2
 
-app_name=$1
+function run() {
+    cd apps/$app_name
+    echo "Running $app_name with args: ${@}"
+    uv run main.py "${@}"
+}
 
-cd apps/$app_name
+function lint() {
+    cd apps/$app_name
+    echo "Linting $app_name"
+}
 
-uv run main.py "${@:2}"
+
+case $command in
+    run)
+        run "${@:3}"
+        ;;
+    lint)
+        lint
+        ;;
+    *)
+        echo "Invalid command"
+        exit 1
+        ;;
+esac
