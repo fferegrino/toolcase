@@ -38,6 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{fromJson(needs.discover-apps.outputs.matrix)}}
+    name: Test ${{ matrix.app }}
     steps:
       - uses: actions/checkout@v4
       

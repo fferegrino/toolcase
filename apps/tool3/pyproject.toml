@@ -1,0 +1,39 @@
+[project]
+name = "tool3"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.2.3",
+    "typer>=0.15.2",
+    "toolcase"
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15.0",
+    "pandas-stubs>=2.2.3.250308",
+    "ruff>=0.11.2",
+]
+
+[tool.uv.sources]
+toolcase = { path = "../../library" }
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "UP", # pyupgrade
+    "B", # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I", # isort
+    "W", # pyright
+]
+
+
+
