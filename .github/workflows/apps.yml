@@ -8,6 +8,7 @@ on:
 
 jobs:
   test-library:
+    name: Test library
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,6 +34,7 @@ jobs:
           uv run pytest
 
   discover-apps:
+    name: Discover apps
     needs: test-library
     runs-on: ubuntu-latest
     outputs:
@@ -54,12 +56,12 @@ jobs:
           APPS=$(echo '${{ steps.find-apps.outputs.apps }}' | tr '\n' ' ' | xargs)
           echo "matrix={\"app\":[\"$(echo $APPS | sed 's/ /","/g')\"]}" >> $GITHUB_OUTPUT
 
-  test-app:
+  check-apps:
     needs: discover-apps
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{fromJson(needs.discover-apps.outputs.matrix)}}
-    name: Test ${{ matrix.app }}
+    name: Check ${{ matrix.app }}
     steps:
       - uses: actions/checkout@v4
       
@@ -68,7 +70,27 @@ jobs:
         with:
           version: "latest"
       - name: Install dependencies
+        working-directory: ${{ matrix.app }}
         run: |
-          echo "Installing dependencies for ${{ matrix.app }}"
-          cd ${{ matrix.app }}
           uv sync
+
+      - name: Check formatting
+        working-directory: ${{ matrix.app }}
+        run: |
+          uv run ruff check .
+
+      - name: Run tests
+        working-directory: ${{ matrix.app }}
+        run: |
+          uv run pytest
+  
+  build-container:
+    name: Build container
+    needs: check-apps
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build container
+        run: |
+          docker build -t toolcase .
