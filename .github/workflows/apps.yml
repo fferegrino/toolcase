@@ -1,0 +1,63 @@
+name: Apps CI
+
+on:
+  push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
+
+jobs:
+  discover-apps:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+
+      - name: Find Python apps
+        id: find-apps
+        run: |
+          APPS=$(find apps -type f -name "pyproject.toml" -exec dirname {} \;)
+          echo "apps<<EOF" >> $GITHUB_OUTPUT
+          echo "$APPS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: Set matrix
+        id: set-matrix
+        run: |
+          APPS=$(echo '${{ steps.find-apps.outputs.apps }}' | tr '\n' ' ' | xargs)
+          echo "matrix={\"app\":[$(echo $APPS | sed 's/ /","/g')]}" >> $GITHUB_OUTPUT
+          echo "matrix={\"app\":[$(echo $APPS | sed 's/ /","/g')]}"
+
+  # test-app:
+  #   needs: discover-apps
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix: ${{fromJson(needs.discover-apps.outputs.matrix)}}
+  #   steps:
+  #     - uses: actions/checkout@v4
+      
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: '3.11'
+          
+  #     - name: Install uv
+  #       run: |
+  #         curl -LsSf https://astral.sh/uv/install.sh | sh
+  #         echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          
+  #     - name: Install dependencies
+  #       run: |
+  #         cd ${{ matrix.app }}
+  #         uv pip install -e .
+          
+  #     - name: Run tests
+  #       run: |
+  #         cd ${{ matrix.app }}
+  #         python -m pytest tests/
