@@ -10,7 +10,8 @@ function run() {
 
 function lint() {
     cd apps/$app_name
-    echo "Linting $app_name"
+    uv add --dev ruff
+    uv run ruff check .
 }
 
 

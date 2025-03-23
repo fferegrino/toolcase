@@ -8,3 +8,9 @@ dependencies = [
     "pandas>=2.2.3",
     "typer>=0.15.2",
 ]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15.0",
+    "pandas-stubs>=2.2.3.250308",
+]

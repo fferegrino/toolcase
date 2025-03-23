@@ -1,2 +1,2 @@
-def hola(name: str):
+def hola(name: str) -> None:
     print(f"Hola, {name}!")
