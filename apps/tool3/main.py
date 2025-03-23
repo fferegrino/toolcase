@@ -2,8 +2,6 @@ import pandas as pd
 import typer
 from toolcase.dataframes import uppercase_columns
 
-from utils import hola
-
 app = typer.Typer()
 
 

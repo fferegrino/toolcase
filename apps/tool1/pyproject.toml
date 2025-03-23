@@ -13,4 +13,5 @@ dependencies = [
 dev = [
     "mypy>=1.15.0",
     "pandas-stubs>=2.2.3.250308",
+    "ruff>=0.11.2",
 ]
