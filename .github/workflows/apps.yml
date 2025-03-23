@@ -32,7 +32,7 @@ jobs:
         run: |
           APPS=$(echo '${{ steps.find-apps.outputs.apps }}' | tr '\n' ' ' | xargs)
           echo "matrix={\"app\":[$(echo $APPS | sed 's/ /","/g')]}" >> $GITHUB_OUTPUT
-          echo "matrix={\"app\":[$(echo $APPS | sed 's/ /","/g')]}"
+          echo "matrix={\"app\":[\"$(echo $APPS | sed 's/ /","/g')\"]}"
 
   # test-app:
   #   needs: discover-apps
