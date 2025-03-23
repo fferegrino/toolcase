@@ -7,17 +7,38 @@ on:
   #   branches: [ main ]
 
 jobs:
+  test-library:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+      
+      - name: Install dependencies
+        working-directory: library
+        run: |
+          uv sync
+
+      - name: Check formatting
+        working-directory: library
+        run: |
+          uv run ruff check .
+
+      - name: Run tests
+        working-directory: library
+        run: |
+          uv run pytest
+
   discover-apps:
+    needs: test-library
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          version: "latest"
 
       - name: Find Python apps
         id: find-apps
