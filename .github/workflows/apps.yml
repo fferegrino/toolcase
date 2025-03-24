@@ -26,7 +26,13 @@ jobs:
       - name: Check formatting
         working-directory: library
         run: |
+          uv run ruff format --check
           uv run ruff check .
+
+      - name: Run type checking
+        working-directory: library
+        run: |
+          uv run mypy src/
 
       - name: Run tests
         working-directory: library
@@ -77,7 +83,13 @@ jobs:
       - name: Check formatting
         working-directory: ${{ matrix.app }}
         run: |
+          uv run ruff format --check
           uv run ruff check .
+
+      - name: Run type checking
+        working-directory: ${{ matrix.app }}
+        run: |
+          uv run mypy src/
 
       - name: Run tests
         working-directory: ${{ matrix.app }}

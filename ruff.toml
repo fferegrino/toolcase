@@ -1,0 +1,16 @@
+# This file is used to configure the ruff tool for all projects in the repository.
+
+target-version = "py311"
+line-length = 120
+indent-width = 4
+
+[lint]
+select = [
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "UP", # pyupgrade
+    "B", # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I", # isort
+    "W", # pyright
+]

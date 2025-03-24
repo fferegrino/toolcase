@@ -13,6 +13,7 @@ The shared library is located in the `library` folder; it is a _uv_ project that
 Before opening a PR, make sure to run the linting and tests:
 
 ```bash
+uv run ruff format --check
 uv run ruff check .
 uv run mypy src/
 uv run pytest
@@ -61,6 +62,18 @@ And add the following development dependencies:
 uv add --dev ruff mypy pytest
 ```
 
+### Adding a dependency to the shared library (optional)
+
+If your app needs to use the shared library, you can add it as a dependency:
+
+```bash
+uv add ../../library
+```
+
+## Configuring your project
+
+Your project must adhere to certain standards, for example, it should use type hints and have a test suite. We enforce these standards whenever you want to contribute to the project.
+
 And finally, add a test file to your repo:
 
 ```bash
@@ -68,10 +81,3 @@ mkdir tests/
 echo "def test_main(): assert True" > tests/test_main.py
 ```
 
-### Adding a dependency to the shared library
-
-If your app needs to use the shared library, you can add it as a dependency:
-
-```bash
-uv add ../../library
-```
