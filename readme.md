@@ -44,3 +44,10 @@ And add the following development dependencies:
 ```bash
 uv add --dev ruff mypy pytest
 ```
+
+And finally, add a test file to your repo:
+
+```bash
+mkdir tests/
+echo "def test_main(): assert True" > tests/test_main.py
+```
