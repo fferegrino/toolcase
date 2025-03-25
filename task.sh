@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Contains all the tasks that can be run
-# locally to aid in development of this
-# project
+# Contains all the tasks that can be run locally to aid 
+# in development of this project.
 
 IMAGE_NAME=toolcase
 
@@ -16,22 +15,11 @@ function bash() {
     docker run -it --rm --entrypoint '' $IMAGE_NAME bash
 }
 
-function _lint() {
-    directory=$1
-    uv run --directory $directory ruff format --check
-    uv run --directory $directory ruff check .
-    uv run --directory $directory mypy .
-}
-
-function _fmt() {
-    directory=$1
-    echo "Formatting $directory"
-    uv run --directory $directory ruff check . --fix
-    uv run --directory $directory ruff format
+function run() {
+    docker run -it --rm $IMAGE_NAME $@
 }
 
 function lint() {
-    # Default first argument to toolcase
     app_name=$1
     if [ -z "$app_name" ]; then
         find apps -type f -name "pyproject.toml" \
@@ -46,7 +34,6 @@ function lint() {
 }
 
 function fmt() {
-    # Default first argument to toolcase
     app_name=$1
     if [ -z "$app_name" ]; then
         find apps -type f -name "pyproject.toml" \
@@ -58,6 +45,20 @@ function fmt() {
     else
         _fmt "apps/$app_name"
     fi
+}
+
+function _lint() {
+    directory=$1
+    uv run --directory $directory ruff format --check
+    uv run --directory $directory ruff check .
+    uv run --directory $directory mypy .
+}
+
+function _fmt() {
+    directory=$1
+    echo "Formatting $directory"
+    uv run --directory $directory ruff check . --fix
+    uv run --directory $directory ruff format
 }
 
 $@

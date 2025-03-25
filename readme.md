@@ -10,15 +10,6 @@ This project relies heavily on the `uv` tool. To install it, check the documenta
 
 The shared library is located in the `library` folder; it is a _uv_ project that follows the `src` layout.
 
-Before opening a PR, make sure to run the linting and tests:
-
-```bash
-uv run ruff format --check
-uv run ruff check .
-uv run mypy src/
-uv run pytest
-```
-
 ## Adding a new app
 
 Create a new folder in the `apps` folder and _cd_ into it:
@@ -78,6 +69,6 @@ And finally, add a test file to your repo:
 
 ```bash
 mkdir tests/
-echo "def test_main(): assert True" > tests/test_main.py
+echo "def test_main():\n    assert True" > tests/test_main.py
 ```
 
