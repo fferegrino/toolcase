@@ -12,46 +12,18 @@ The shared library is located in the `library` folder; it is a _uv_ project that
 
 ## Adding a new app
 
-Create a new folder in the `apps` folder and _cd_ into it:
+To create a new app, you can use the `task.sh` script:
 
 ```bash
-mkdir apps/my_cool_app
-cd apps/my_cool_app
+./task.sh new <app_name>
 ```
 
-Initialise a new _uv_ project:
-
-```bash
-uv init --python 3.11
-```
-
-The above command should create some default files in your new app folder:
-
-```text
-.
-├── README.md
-├── hello.py
-├── pyproject.toml
-└── uv.lock
-```
-
-And you should be able to run your new script like:
-
-```bash
-uv run hello.py
-```
-
-Before moving on to writing your code, rename the `hello.py` file to `main.py`.
-
-```bash
-mv hello.py main.py
-```
-
-And add the following development dependencies:
-
-```bash
-uv add --dev ruff mypy pytest
-```
+This will:
+1. Create a new folder for the app under `apps/<app_name>`.
+2. Initialize a new `uv` project with Python 3.11.
+3. Remove the default `hello.py` file and replace it with a `main.py` file containing a simple `main()` function.
+4. Add development dependencies (`ruff`, `mypy`, and `pytest`).
+5. Create a `tests` folder with a basic test file.
 
 ### Adding a dependency to the shared library (optional)
 
@@ -61,14 +33,66 @@ If your app needs to use the shared library, you can add it as a dependency:
 uv add ../../library
 ```
 
-## Configuring your project
+Make sure you run this command from the app's folder.
 
-Your project must adhere to certain standards, for example, it should use type hints and have a test suite. We enforce these standards whenever you want to contribute to the project.
+## Running tasks
 
-And finally, add a test file to your repo:
+The `task.sh` script provides several tasks to aid in development:
+
+### Build the Docker image
+
+To build the Docker image:
 
 ```bash
-mkdir tests/
-echo "def test_main():\n    assert True" > tests/test_main.py
+./task.sh build
 ```
 
+### Run a bash shell in the Docker container
+
+To open a bash shell inside the Docker container:
+
+```bash
+./task.sh bash
+```
+
+### Run the Docker container
+
+To run the Docker container with specific arguments:
+
+```bash
+./task.sh run <app_name> <args>
+```
+
+### Linting
+
+To lint all apps or a specific app:
+
+```bash
+# Lint all apps
+./task.sh lint
+
+# Lint a specific app
+./task.sh lint <app_name>
+
+# Lint the shared library
+./task.sh lint library
+```
+
+This will run `ruff` and `mypy` checks on the specified app or library.
+
+### Formatting
+
+To format all apps or a specific app:
+
+```bash
+# Format all apps
+./task.sh fmt
+
+# Format a specific app
+./task.sh fmt <app_name>
+
+# Format the shared library
+./task.sh fmt library
+```
+
+This will run `ruff` to fix formatting issues in the specified app or library.
