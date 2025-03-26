@@ -16,9 +16,25 @@ dependencies = [
 dev = [
     "mypy>=1.15.0",
     "pandas-stubs>=2.2.3.250308",
+    "pytest>=8.3.5",
     "ruff>=0.11.2",
 ]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "UP", # pyupgrade
+    "B", # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I", # isort
+    "W", # pyright
+]

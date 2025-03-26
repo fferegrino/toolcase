@@ -19,8 +19,8 @@ WORKDIR /app
 
 COPY apps/ ./apps/
 
-COPY run_app.sh ./
+COPY run.sh ./
 
-RUN chmod +x run_app.sh
+RUN chmod +x run.sh
 
-ENTRYPOINT ["./run_app.sh"]
+ENTRYPOINT ["./run.sh"]

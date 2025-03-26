@@ -1,18 +1,19 @@
 [project]
-name = "tool1"
+name = "my-cool-app"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
-    "pandas>=2.2.3",
-    "typer>=0.15.2",
+    "toolcase",
 ]
 
 [dependency-groups]
 dev = [
     "mypy>=1.15.0",
-    "pandas-stubs>=2.2.3.250308",
     "pytest>=8.3.5",
     "ruff>=0.11.2",
 ]
+
+[tool.uv.sources]
+toolcase = { path = "../../library" }

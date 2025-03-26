@@ -1,1 +1,8 @@
 .DS_Store
+.venv/
+.mypy_cache/
+.ruff_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

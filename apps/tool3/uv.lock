@@ -492,7 +492,7 @@ wheels = [
 ]
 
 [[package]]
-name = "tool2"
+name = "tool3"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

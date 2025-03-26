@@ -1,0 +1,108 @@
+name: Apps CI
+
+on:
+  push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
+
+jobs:
+  test-library:
+    name: Test library
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+      
+      - name: Install dependencies
+        working-directory: library
+        run: |
+          uv sync
+
+      - name: Check formatting
+        working-directory: library
+        run: |
+          uv run ruff format --check
+          uv run ruff check .
+
+      - name: Run type checking
+        working-directory: library
+        run: |
+          uv run mypy src/
+
+      - name: Run tests
+        working-directory: library
+        run: |
+          uv run pytest
+
+  discover-apps:
+    name: Discover apps
+    needs: test-library
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find Python apps
+        id: find-apps
+        run: |
+          APPS=$(find apps -type f -name "pyproject.toml" -exec dirname {} \;)
+          echo "apps<<EOF" >> $GITHUB_OUTPUT
+          echo "$APPS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: Set matrix
+        id: set-matrix
+        run: |
+          APPS=$(echo '${{ steps.find-apps.outputs.apps }}' | tr '\n' ' ' | xargs)
+          echo "matrix={\"app\":[\"$(echo $APPS | sed 's/ /","/g')\"]}" >> $GITHUB_OUTPUT
+
+  check-apps:
+    needs: discover-apps
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.discover-apps.outputs.matrix)}}
+    name: Check ${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+      - name: Install dependencies
+        working-directory: ${{ matrix.app }}
+        run: |
+          uv sync
+
+      - name: Check formatting
+        working-directory: ${{ matrix.app }}
+        run: |
+          uv run ruff format --check
+          uv run ruff check .
+
+      - name: Run type checking
+        working-directory: ${{ matrix.app }}
+        run: |
+          uv run mypy .
+
+      - name: Run tests
+        working-directory: ${{ matrix.app }}
+        run: |
+          uv run pytest
+  
+  build-container:
+    name: Build container
+    needs: check-apps
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build container
+        run: |
+          docker build -t toolcase .
