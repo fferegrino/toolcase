@@ -49,13 +49,13 @@ To build the Docker image:
 
 ### Run a bash shell in the Docker container
 
-To open a bash shell inside the Docker container:
+To open a bash shell inside the Docker container - useful to debug any issues:
 
 ```bash
 ./task.sh bash
 ```
 
-### Run the Docker container
+### Run an app inside the Docker container
 
 To run the Docker container with specific arguments:
 

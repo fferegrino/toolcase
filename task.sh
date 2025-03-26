@@ -56,6 +56,7 @@ function lint() {
     if [ -z "$app_name" ]; then
         find apps -type f -name "pyproject.toml" \
              -maxdepth 2 -mindepth 2 -exec dirname {} \; | while read -r directory; do
+             echo "Linting $directory"
             _lint $directory
         done
     elif [ "$app_name" == "library" ]; then
@@ -70,6 +71,7 @@ function fmt() {
     if [ -z "$app_name" ]; then
         find apps -type f -name "pyproject.toml" \
              -maxdepth 2 -mindepth 2 -exec dirname {} \; | while read -r directory; do
+             echo "Formatting $directory"
             _fmt $directory
         done
     elif [ "$app_name" == "library" ]; then

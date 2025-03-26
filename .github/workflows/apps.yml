@@ -89,7 +89,7 @@ jobs:
       - name: Run type checking
         working-directory: ${{ matrix.app }}
         run: |
-          uv run mypy src/
+          uv run mypy .
 
       - name: Run tests
         working-directory: ${{ matrix.app }}
